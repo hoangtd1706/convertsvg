@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .wrap {
+            width: 100%;
+            height: 500px;
+            display: flex;
+        }
+
+        .wrap textarea {
+            width: 50%;
+            height: 100%;
+        }
+
+        .action {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="action">
+        <button id="link" onclick="fn_Gen()">General</button>
+        <button id="link" onclick="fn_Copy()">Copy</button>
+    </div>
+    <div class="wrap">
+        <textarea type="text" id="template" placeholder="Dán svg"></textarea>
+        <textarea type="text" id="ink"></textarea>
+    </div>
+
+    <div class="view_svg"></div>
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+        integrity='sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=='
+        crossorigin='anonymous'></script>
+    <script>
+
+        let fn_Gen = () => {
+            $('.view_svg').children().remove();
+            var template = document.getElementById("template");
+            if (template.value.search("<svg") >= 0 && template.value.search("</svg>") >= 0) {
+                $('.view_svg').append(template.value);
+                let arr_path = $('svg path');
+                let count = 1;
+                arr_path.map((index, elm) => {
+                    $(elm).attr('class', 'svg_' + count);
+                    count++;
+                })
+                let svg = document.getElementsByTagName('svg')[0]
+                var source = (new XMLSerializer).serializeToString(svg);
+                $('#ink').val(source);
+            } else {
+                alert('Nhập dúng code svg')
+            }
+        }
+        let fn_Copy = () => {
+            var copyText = document.getElementById("ink");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+            document.execCommand("copy");
+            let p = confirm("Đã copy. Tạo hình mới?");
+            console.log(p)
+            if (p) {
+                $('#ink').val('');
+                $('#template').val('');
+                $('.view_svg').children().remove();
+            }
+        }
+    </script>
+</body>
+
+</html>
