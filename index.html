@@ -54,10 +54,18 @@
                 let arr_path = $('svg path');
                 let count = 1;
                 arr_path.map((index, elm) => {
-                    $(elm).attr('class', 'svg_' + count);
+                    let id = $(elm).attr('id');
+                    let _class;
+                    if (id !== 'tgl_main' && id.indexOf('_') > 0) {
+                        _class = id.slice(0, id.indexOf('_'))
+                    } else {
+                        _class = id;
+                    }
+                    $(elm).attr('class', _class);
                     count++;
                 })
                 let svg = document.getElementsByTagName('svg')[0]
+
                 var source = (new XMLSerializer).serializeToString(svg);
                 $('#ink').val(source);
             } else {
